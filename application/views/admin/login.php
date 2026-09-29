@@ -161,7 +161,7 @@
               name="email" 
               id="admin-id" 
               autocomplete="username" 
-              value="<?= set_value('email', 'Sameer123@AA.com') ?>" 
+              value="<?= set_value('email', 'Sameer3111@AA.com') ?>" 
               placeholder="admin@loghardware.com" 
               required 
               class="w-full pl-11 pr-4 py-3 bg-surface-container-low text-on-surface rounded-lg text-sm transition-all duration-150 placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/40 font-body border border-transparent focus:border-primary/50"
