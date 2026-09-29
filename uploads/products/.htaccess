@@ -1,0 +1,14 @@
+# Disable PHP execution in uploads directory
+<FilesMatch "(?i)\.(php|php3|php4|php5|php7|phtml|pl|py|cgi|sh|bash|exe|asp|aspx|jsp)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Only allow safe image file types
+<FilesMatch "(?i)\.(jpg|jpeg|png|gif|webp|svg)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+Options -Indexes
+Options -ExecCGI

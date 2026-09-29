@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"inverse-on-surface":"#faf5ee","tertiary-container":"#d47070","surface-container-lowest":"#ffffff","on-primary":"#ffffff","on-secondary":"#ffffff","inverse-surface":"#3a302a","background":"#faf5ee","on-primary-fixed":"#401a08","error-container":"#fce4e0","outline-variant":"#d8d0c8","surface-container-highest":"#e6e0d6","on-tertiary-fixed":"#2e1515","primary-container":"#e08850","tertiary-fixed-dim":"#e8a0a0","surface-container-low":"#f6f0e8","tertiary":"#8c3c3c","on-secondary-fixed":"#2a2420","on-background":"#3a302a","on-surface":"#3a302a","on-tertiary":"#ffffff","on-primary-container":"#fbe8d8","on-primary-fixed-variant":"#8a4518","secondary-fixed":"#eae2da","on-secondary-container":"#605850","tertiary-fixed":"#fce0e0","outline":"#9a9088","on-error-container":"#7a1a10","surface-dim":"#dcd6cc","surface-bright":"#faf5ee","primary":"#c2652a","on-surface-variant":"#605850","on-tertiary-fixed-variant":"#6e3030","surface-container-high":"#ece6dc","on-tertiary-container":"#3a2020","primary-fixed-dim":"#f0a878","secondary-fixed-dim":"#cec6be","secondary-container":"#eae2da","inverse-primary":"#f0a878","on-error":"#ffffff","primary-fixed":"#fbe8d8","surface-variant":"#ece6dc","error":"#c0392b","surface":"#faf5ee","secondary":"#78706a","on-secondary-fixed-variant":"#504840","surface-container":"#f2ece4","surface-tint":"#c2652a"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{},"fontFamily":{"headline":["EB Garamond"],"display":["EB Garamond"],"body":["Manrope"],"label":["Manrope"]},"fontSize":{}}}}</script></head><body class="bg-surface font-body text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 h-16 bg-inverse-surface text-inverse-on-surface z-50 flex items-center justify-between px-6 shadow-[0_2px_16px_rgba(58,48,42,0.08)]"><div class="flex items-center gap-3 w-64 shrink-0"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl tracking-wider shadow-sm">LH</div><div><span class="font-headline text-lg font-bold tracking-wide text-inverse-on-surface block leading-tight">LOG HARDWARE</span><span class="text-[10px] tracking-widest uppercase font-medium text-secondary-fixed-dim block">Portal Architecture</span></div></div><div class="flex-1 px-8 hidden md:flex items-center"><div class="flex items-center gap-2 text-xs font-medium text-secondary-fixed-dim"><span class="material-symbols-outlined text-[16px] text-primary-fixed-dim">home</span><span class="hover:text-inverse-on-surface transition-colors cursor-pointer">Admin Portal</span><span class="text-[10px] opacity-40">/</span><span class="text-inverse-on-surface font-semibold tracking-wide">Sahara Cluster</span></div></div><div class="flex items-center gap-4 shrink-0"><div class="flex items-center gap-3 bg-on-background/20 rounded-full py-1.5 pl-3 pr-2"><div class="flex flex-col text-right"><span class="text-xs font-semibold text-inverse-on-surface leading-tight">Hardware Operations</span><span class="text-[10px] text-primary-fixed-dim font-medium tracking-wide">Admin - Sahara Bengaluru</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-6 px-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)]"><div class="space-y-6"><div class="px-3"><p class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant font-label">Control Center</p></div><nav class="flex flex-col gap-1.5" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm rounded-lg"><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="inventory-catalog" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Inventory &amp; Catalog</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="add-product" href="#"><span class="material-symbols-outlined text-[20px]">add_box</span><span>Add Product</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="orders-inquiries" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Orders &amp; Inquiries</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="store-branches" href="#"><span class="material-symbols-outlined text-[20px]">store</span><span>Store Branches</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="analytics" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span>Analytics</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Settings</span></a></nav></div><div class="px-3 pt-4"><div class="p-3.5 rounded-xl bg-surface-container flex items-center justify-between"><div class="flex flex-col"><span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Status</span><span class="text-xs font-semibold text-primary flex items-center gap-1.5 mt-0.5"><span class="w-2 h-2 rounded-full bg-primary inline-block"></span>Live Node</span></div><span class="material-symbols-outlined text-outline text-[18px]">verified</span></div></div></aside><div class="pl-64"><main class="w-full min-h-screen pt-16 bg-surface px-8 pb-12"><div class="flex flex-col w-full">
+<!-- Subtle Ambient Glow -->
+<div class="relative w-full">
+<div class="absolute -top-10 right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-40 left-12 w-80 h-80 bg-tertiary-fixed-dim/20 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Top Action & Overview Strip -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8">
+<div>
+<div class="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-widest text-primary font-label">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Central Bengaluru Hub
+        </div>
+<h1 class="font-headline text-3xl sm:text-4xl text-on-surface font-semibold tracking-tight">
+          Inventory &amp; Catalog Management
+        </h1>
+<p class="text-sm text-on-surface-variant mt-1 font-body">
+          Real-time catalog oversight, technician wholesale pricing, and WhatsApp lead-link distribution.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-sm font-semibold transition shadow-sm" type="button">
+<span class="material-symbols-outlined text-[19px] text-on-surface-variant">file_download</span>
+<span>Export Catalog (CSV)</span>
+</button>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-sm font-semibold transition shadow-md shadow-primary/20" id="triggerModalBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>+ Add New Product</span>
+</button>
+</div>
+</div>
+<!-- KPI Summary Metrics (Bento Style) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<!-- Metric 1 -->
+<div class="p-6 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Active Inventory</span>
+<span class="p-2 rounded-lg bg-surface-container text-primary material-symbols-outlined text-[20px]">inventory</span>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-3xl font-bold text-on-surface">384</span>
+<span class="text-xs font-medium text-primary">Parts</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Across 14 appliance categories</p>
+</div>
+<!-- Sparkline decoration -->
+<svg class="w-full h-8 mt-3 text-primary/30" fill="none" preserveaspectratio="none" stroke="currentColor" viewbox="0 0 100 24">
+<path d="M0 18 Q 20 6, 40 14 T 80 8 T 100 4" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<!-- Metric 2 -->
+<div class="p-6 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Low Stock Alert</span>
+<span class="p-2 rounded-lg bg-surface-container text-primary-container material-symbols-outlined text-[20px]">warning</span>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-3xl font-bold text-primary">14</span>
+<span class="text-xs font-medium text-error">Reorder needed</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Below critical threshold (&lt;5 units)</p>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 32%"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="p-6 rounded-2xl bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Out of Stock</span>
+<span class="p-2 rounded-lg bg-surface-container text-error material-symbols-outlined text-[20px]">do_not_disturb_on</span>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-3xl font-bold text-error">8</span>
+<span class="text-xs font-medium text-on-surface-variant">items locked</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Pending vendor dispatch</p>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 14%"></div>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="p-6 rounded-2xl bg-surface-container-high shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">WhatsApp Inquiries</span>
+<span class="p-2 rounded-lg bg-surface-container-lowest text-primary material-symbols-outlined text-[20px]">chat</span>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-3xl font-bold text-on-surface">42</span>
+<span class="text-xs font-semibold text-primary font-label">+18% today</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">Direct technician routing active</p>
+</div>
+<div class="flex items-center gap-1.5 mt-4 text-[11px] text-on-surface-variant font-medium">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+          Avg. response latency: 4 mins
+        </div>
+</div>
+</div>
+<!-- Underlying Inventory Table View -->
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_2px_16px_rgba(58,48,42,0.04)] overflow-hidden">
+<div class="p-5 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-container-low/60">
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<div class="relative w-full sm:w-80">
+<span class="material-symbols-outlined absolute left-3.5 top-2.5 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest rounded-lg text-xs font-medium text-on-surface placeholder:text-outline focus:outline-none shadow-sm focus:ring-1 focus:ring-primary" placeholder="Search by SKU, Part Name, Brand..." type="text"/>
+</div>
+<button class="p-2 bg-surface-container-lowest rounded-lg text-on-surface-variant hover:text-on-surface shadow-sm">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+<div class="flex items-center gap-2 self-end sm:self-center text-xs font-medium text-on-surface-variant">
+<span>Sort:</span>
+<span class="font-semibold text-on-surface cursor-pointer flex items-center gap-1">
+            Recently Added <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="bg-surface-container-high/40 text-on-surface-variant font-label uppercase tracking-wider text-[11px]">
+<th class="py-3.5 px-6 font-semibold">SKU &amp; Item Details</th>
+<th class="py-3.5 px-4 font-semibold">Categories</th>
+<th class="py-3.5 px-4 font-semibold">Brand Compatibility</th>
+<th class="py-3.5 px-4 font-semibold">Stock Status</th>
+<th class="py-3.5 px-4 font-semibold text-right">Wholesale / MRP</th>
+<th class="py-3.5 px-6 font-semibold text-center">Quick Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/40 transition">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Compact commercial air conditioner rotary inverter compressor spare part crafted from solid copper and matte black steel casing photographed on a clean warm workshop table in soft natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbELTbBsNHBodh9L6XVRtWy2VHBZJlZUB0q2k9ZmEk0JyND-V7c2j8RQ2qH_BmNkWW3XA-t7YK3xNhwM9FO2m_jbC1CCbiwaSp1aZ79PXZtxPczSruXkWV3PsjW5BAWRfhdNWvRl36_YG_cRCqNFntWWrSZkunVg4JErdNg-YYiBdMgxcJyDlIBO-GruW3IsgK4Y_AEEJn97GKN-LrgxRFaS9h5jkcxfQcm3CCZlilldE11IULCzhQ"/>
+</div>
+<div>
+<span class="font-semibold text-on-surface text-sm block">Inverter Rotary AC Compressor 1.5T</span>
+<span class="text-[11px] font-mono text-outline tracking-wider">SKU: AC-COMP-094</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-block px-2.5 py-1 rounded-full bg-surface-container font-medium text-on-surface-variant">AC Spare Parts</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-wrap gap-1 max-w-[200px]">
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">LG</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Samsung</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Daikin</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Voltas</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ecfdf3] text-[#16b364] font-semibold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#16b364]"></span>
+                    38 in stock
+                  </span>
+</div>
+<span class="text-[10px] text-on-surface-variant block mt-1">Aisle 4, Bin B-12</span>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="font-bold text-sm text-on-surface block">₹5,950</span>
+<span class="text-[11px] text-outline line-through">₹6,800 MRP</span>
+</td>
+<td class="py-4 px-6 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1.5 rounded-lg text-primary hover:bg-primary/10" title="View WhatsApp Link">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container" title="Edit Product">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-error hover:bg-error-container" title="Delete Item">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/40 transition">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="High precision copper manifold gauge set with dual blue and red dials and high pressure hoses for HVAC refrigeration diagnostics against a warm neutral terracotta workshop backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9vlT0BcqvxnqFqus7WwdxcA61MScoZ-a9GsPBxHYbEbqoF1hWh8r7AAiQbR-f-Zz5CFTjxdX6i9A71EaiP0pW71D4AnpBTyU95apEss46HUCazJnFrDaFDj-pmTlulheG2aNQ_JPB9OX8uXig1e-chnOCWvnzMvwTvXNG0mqiiF4PGMYg3zwdLFtDmP4Z5HXgUGFe3-aJD3m5duOmsMSWlmIfaHgMixhAtd_v3eQoeDsMZHQtmdLJ"/>
+</div>
+<div>
+<span class="font-semibold text-on-surface text-sm block">Dual Manifold Pressure Testing Gauge</span>
+<span class="text-[11px] font-mono text-outline tracking-wider">SKU: TOOL-MNF-102</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-block px-2.5 py-1 rounded-full bg-surface-container font-medium text-on-surface-variant">General Tools</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Universal</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fff1f2] text-error font-semibold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                  Low (3 units)
+                </span>
+<span class="text-[10px] text-on-surface-variant block mt-1">Aisle 1, Rack C-03</span>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="font-bold text-sm text-on-surface block">₹2,200</span>
+<span class="text-[11px] text-outline line-through">₹2,850 MRP</span>
+</td>
+<td class="py-4 px-6 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1.5 rounded-lg text-primary hover:bg-primary/10" title="View WhatsApp Link">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container" title="Edit Product">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-error hover:bg-error-container" title="Delete Item">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/40 transition">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Heavy duty direct drive washing machine drain pump motor with clean white housing and brass impellers shot overhead in clean studio lighting with warm linen undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTlfg_xW0HMUTi2GhK9H5F18f6E-fBBKlFnDg81JGn_Cua4gV8Q5qbf7pZPrM1VHpkWndjUzKOL19MspQxdvhDrNAJj2UsZheSIovg6P2t3iPAxaxr-wL17ir1tMtLdEk6jqD1zcYxPW-07tMwg0OyAdZHdXINcw4S7i8iLDkG0CIWqoR4HrFML4sjUEyo3P-8M1SWuv0rj0iOcHwo4WbyNUzbcPZbZIYZ4-rs56mhU9OvzrUgZC8d"/>
+</div>
+<div>
+<span class="font-semibold text-on-surface text-sm block">Direct-Drive Washing Machine Drain Pump</span>
+<span class="text-[11px] font-mono text-outline tracking-wider">SKU: WM-PMP-402</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-block px-2.5 py-1 rounded-full bg-surface-container font-medium text-on-surface-variant">Washing Machine</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">IFB</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Bosch</span>
+<span class="px-2 py-0.5 rounded text-[10px] bg-secondary-container text-on-secondary-container font-semibold">Samsung</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ecfdf3] text-[#16b364] font-semibold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#16b364]"></span>
+                  22 in stock
+                </span>
+<span class="text-[10px] text-on-surface-variant block mt-1">Aisle 2, Bin D-09</span>
+</td>
+<td class="py-4 px-4 text-right">
+<span class="font-bold text-sm text-on-surface block">₹1,180</span>
+<span class="text-[11px] text-outline line-through">₹1,450 MRP</span>
+</td>
+<td class="py-4 px-6 text-center">
+<div class="flex items-center justify-center gap-1.5">
+<button class="p-1.5 rounded-lg text-primary hover:bg-primary/10" title="View WhatsApp Link">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container" title="Edit Product">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-error hover:bg-error-container" title="Delete Item">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- HIGH-FIDELITY ACTIVE MODAL: ADD PRODUCT & SPARE PART -->
+<!-- ============================================================ -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-inverse-surface/60 backdrop-blur-sm transition-opacity duration-200" id="productModal">
+<div class="relative w-full max-w-5xl max-h-[942px] flex flex-col bg-surface rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+<!-- Modal Header Bar -->
+<div class="px-8 py-5 bg-surface-container-low flex items-center justify-between shrink-0 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">add_circle</span>
+</div>
+<div>
+<h2 class="font-headline text-2xl font-semibold text-on-surface leading-tight">
+              Add New Product &amp; Spare Part
+            </h2>
+<span class="text-xs text-on-surface-variant font-body">Catalog Hub • Sahara Bengaluru Central Node</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[11px] font-semibold">
+            Draft Auto-Saved
+          </span>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition" id="closeModalBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<!-- Modal Body Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-8 py-7 space-y-8 bg-surface">
+<!-- SECTION 1: Essential Identity -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<div class="md:col-span-8 space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface font-label">
+              Product Title / Spare Part Name <span class="text-error">*</span>
+</label>
+<input class="w-full px-4 py-3 bg-surface-container-lowest rounded-xl text-sm font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" placeholder="e.g., Inverter Rotary AC Compressor 1.5T" type="text" value="Inverter Rotary AC Compressor 1.5T"/>
+<span class="text-[11px] text-on-surface-variant">Recommended: Include appliance category, tonnage, or exact model fit.</span>
+</div>
+<div class="md:col-span-4 space-y-2">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface font-label">
+                SKU / Barcode <span class="text-error">*</span>
+</label>
+<button class="text-[11px] font-semibold text-primary hover:underline flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[14px]">refresh</span> Auto-Generate
+              </button>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-3 text-outline text-[18px]">qr_code_2</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest rounded-xl text-sm font-mono font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="AC-COMP-094"/>
+</div>
+<span class="text-[11px] text-on-surface-variant">Unique identifier across Karnataka warehouse bins.</span>
+</div>
+</div>
+<!-- SECTION 2: Multi-Select Taxonomies -->
+<div class="p-6 rounded-2xl bg-surface-container-low/70 space-y-6">
+<!-- Category Multi-Select -->
+<div>
+<div class="flex items-center justify-between mb-2.5">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[17px]">category</span>
+                Multi-Select Categories
+              </span>
+<span class="text-[11px] text-on-surface-variant">2 selected</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<!-- Selected Pills -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-on-primary text-xs font-semibold shadow-sm">
+                AC Spare Parts
+                <button class="hover:opacity-75" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-on-primary text-xs font-semibold shadow-sm">
+                General Tools
+                <button class="hover:opacity-75" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<!-- Unselected Pills -->
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Washing Machine
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Refrigerator
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Water Purifier
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Microwave &amp; Oven
+              </button>
+<!-- New category quick-add -->
+<div class="relative inline-flex items-center">
+<input class="w-32 px-3 py-1 rounded-full bg-surface-container-lowest text-xs text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary shadow-sm" placeholder="+ Add Category" type="text"/>
+</div>
+</div>
+</div>
+<!-- Brand Compatibility Multi-Select -->
+<div>
+<div class="flex items-center justify-between mb-2.5">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[17px]">verified</span>
+                Brand Compatibility (Multi-Brand OEM Fit)
+              </span>
+<span class="text-[11px] text-on-surface-variant">4 brands enabled</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<!-- Selected Pills -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold shadow-sm">
+                LG
+                <button class="hover:text-error" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold shadow-sm">
+                Samsung
+                <button class="hover:text-error" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold shadow-sm">
+                Daikin
+                <button class="hover:text-error" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold shadow-sm">
+                Voltas
+                <button class="hover:text-error" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<!-- Unselected Available Brands -->
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Whirlpool
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Hitachi
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + IFB
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Bosch
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Carrier
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + Panasonic
+              </button>
+</div>
+</div>
+<!-- Sizes & Tonnage Capacities Multi-Select -->
+<div>
+<div class="flex items-center justify-between mb-2.5">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[17px]">straighten</span>
+                Sizes, Tonnage &amp; Capacities
+              </span>
+<span class="text-[11px] text-on-surface-variant">3 configurations</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container text-on-primary text-xs font-semibold shadow-sm">
+                1.5 Ton
+                <button class="hover:opacity-75" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container text-on-primary text-xs font-semibold shadow-sm">
+                2 Ton
+                <button class="hover:opacity-75" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-container text-on-primary text-xs font-semibold shadow-sm">
+                Universal
+                <button class="hover:opacity-75" type="button"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + 0.8 Ton
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + 1.0 Ton
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + 380mm Drum
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + 240L - 350L
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant text-xs font-medium transition shadow-sm" type="button">
+                + 80 GPD
+              </button>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Stock Status, Location & Inquiries -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Availability State -->
+<div class="p-5 rounded-2xl bg-surface-container-low flex flex-col justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label">Availability Status</span>
+<div class="my-3 flex items-center gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg bg-[#16b364] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                In Stock
+              </button>
+<button class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs font-semibold flex items-center justify-center gap-1.5" type="button">
+                Out of Stock
+              </button>
+</div>
+<span class="text-[11px] text-on-surface-variant">Live status mirrored across technician portal.</span>
+</div>
+<!-- Quantity & Bin Location -->
+<div class="p-5 rounded-2xl bg-surface-container-low space-y-3">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label">Warehouse Inventory</span>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-[10px] uppercase font-bold text-on-surface-variant block mb-1">Quantity</label>
+<input class="w-full px-3 py-2 bg-surface-container-lowest rounded-lg text-sm font-semibold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-sm" type="number" value="38"/>
+</div>
+<div>
+<label class="text-[10px] uppercase font-bold text-on-surface-variant block mb-1">Unit Type</label>
+<span class="w-full inline-block px-3 py-2 bg-surface-container text-xs font-medium text-on-surface rounded-lg">Units</span>
+</div>
+</div>
+<div>
+<label class="text-[10px] uppercase font-bold text-on-surface-variant block mb-1">Bin Location</label>
+<input class="w-full px-3 py-1.5 bg-surface-container-lowest rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:ring-1 focus:ring-primary shadow-sm" type="text" value="Aisle 4, Bin B-12 (Sahara Bengaluru)"/>
+</div>
+</div>
+<!-- WhatsApp Direct Inquiry Toggle -->
+<div class="p-5 rounded-2xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label">WhatsApp Leads</span>
+<p class="text-[11px] text-on-surface-variant mt-1">Generate quick inquiry deep-link for instant booking.</p>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px]">quickreply</span>
+</div>
+<div class="mt-4 p-3 bg-surface-container-lowest rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#16b364]"></span>
+<span class="text-xs font-bold text-on-surface">Enabled</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- SECTION 4: Pricing & Warranty Matrix -->
+<div class="p-6 rounded-2xl bg-surface-container-low space-y-4">
+<span class="text-xs font-bold uppercase tracking-wider text-on-surface font-label block">Pricing &amp; Technician Margin Structure</span>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div>
+<label class="text-xs font-semibold text-on-surface block mb-1.5">Retail Price (MRP)</label>
+<div class="relative">
+<span class="absolute left-3 top-2.5 font-bold text-sm text-on-surface-variant">₹</span>
+<input class="w-full pl-8 pr-4 py-2 bg-surface-container-lowest rounded-xl text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="6,800"/>
+</div>
+<span class="text-[10px] text-on-surface-variant mt-1 block">Customer catalog display</span>
+</div>
+<div>
+<label class="text-xs font-semibold text-primary block mb-1.5">Wholesale / Technician Rate</label>
+<div class="relative">
+<span class="absolute left-3 top-2.5 font-bold text-sm text-primary">₹</span>
+<input class="w-full pl-8 pr-4 py-2 bg-surface-container-lowest rounded-xl text-sm font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="5,950"/>
+</div>
+<span class="text-[10px] text-primary font-semibold mt-1 block">12.5% Technician Discount</span>
+</div>
+<div>
+<label class="text-xs font-semibold text-on-surface block mb-1.5">Warranty Policy</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">verified_user</span>
+<input class="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-xl text-sm font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="6 Months Replacement"/>
+</div>
+<span class="text-[10px] text-on-surface-variant mt-1 block">Includes copper coil defect warranty</span>
+</div>
+</div>
+</div>
+<!-- SECTION 5: Description & Dynamic Attributes -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Overview text -->
+<div class="md:col-span-7 space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface font-label">
+              About / Product Overview
+            </label>
+<textarea class="w-full p-4 bg-surface-container-lowest rounded-xl text-xs sm:text-sm leading-relaxed font-body text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" placeholder="Detail part build, heat dissipation parameters, and application note..." rows="6">100% pure copper winding, high-efficiency OEM grade inverter compressor engineered for R32 and R410A refrigerants. Delivers rapid cooling cycle restoration with anti-vibration rubber damper feet included. Calibrated specifically for tropical high-ambient operating conditions in southern subcontinent climates.</textarea>
+</div>
+<!-- Dynamic Technical Specs (Key-Value) -->
+<div class="md:col-span-5 space-y-2.5">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface font-label">
+                Technical Attributes
+              </label>
+<button class="text-[11px] font-semibold text-primary hover:underline" type="button">+ Add Spec</button>
+</div>
+<div class="space-y-2 bg-surface-container-low/60 p-3.5 rounded-xl">
+<!-- Item 1 -->
+<div class="flex items-center gap-2">
+<input class="w-5/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs font-semibold text-on-surface focus:outline-none" type="text" value="Refrigerant"/>
+<span class="text-xs text-outline">:</span>
+<input class="w-7/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs text-on-surface focus:outline-none" type="text" value="R32 / R410A"/>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-2">
+<input class="w-5/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs font-semibold text-on-surface focus:outline-none" type="text" value="Voltage"/>
+<span class="text-xs text-outline">:</span>
+<input class="w-7/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs text-on-surface focus:outline-none" type="text" value="220-240V 50Hz"/>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-2">
+<input class="w-5/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs font-semibold text-on-surface focus:outline-none" type="text" value="Connector"/>
+<span class="text-xs text-outline">:</span>
+<input class="w-7/12 px-2.5 py-1.5 bg-surface-container-lowest rounded text-xs text-on-surface focus:outline-none" type="text" value="3-Pin Quick Coupler"/>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 6: Media Upload & Gallery -->
+<div class="space-y-3">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface font-label">
+            Media &amp; Photos (High Resolution Inspection Angles)
+          </label>
+<div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+<!-- Dropzone -->
+<div class="p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container text-center flex flex-col items-center justify-center cursor-pointer transition">
+<span class="material-symbols-outlined text-primary text-[32px] mb-2">cloud_upload</span>
+<span class="text-xs font-bold text-on-surface">Upload Images</span>
+<span class="text-[10px] text-on-surface-variant mt-0.5">Drag &amp; drop or browse</span>
+</div>
+<!-- Previews -->
+<div class="relative h-28 rounded-2xl overflow-hidden shadow-sm group">
+<img class="w-full h-full object-cover" data-alt="Closeup studio shot of an OEM industrial inverter compressor copper terminals and brass valve joints under warm studio glow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx4ip-hOoBKpVDERCBKyynUivu7k05vqIPq1Q-d9ioN_v4ZvczPhHQ3z5puTcnAaH_i2Xyha7lITRr8wuhi5C3DfhWKyoXj4I02ilPdFfPD5-IWoRaMWje9L4oG-OEPXkaFOJMzVoUAw7iLkcHMxfCuqrRQaoZgflf5Pa2KfWBR_GufPF-lzVS2VFIuulZyHOUb-D3c7Y_6vPvom6LYYlWbSKvuHz7odl45bve0A08Jw4HhI-JD7rP"/>
+<div class="absolute inset-0 bg-inverse-surface/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+<button class="p-1 rounded-full bg-surface text-on-surface hover:text-primary"><span class="material-symbols-outlined text-[16px]">visibility</span></button>
+<button class="p-1 rounded-full bg-surface text-error hover:bg-error-container"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+</div>
+<span class="absolute bottom-1.5 left-2 px-2 py-0.5 rounded text-[9px] font-semibold bg-inverse-surface/75 text-inverse-on-surface">Primary</span>
+</div>
+<div class="relative h-28 rounded-2xl overflow-hidden shadow-sm group">
+<img class="w-full h-full object-cover" data-alt="Technical specification label sticker mounted on a steel compressor cylinder exhibiting electrical wiring schematic diagrams and certification numbers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZzhipa2BxiNBrVRl3tsu00AgvvznmTflfFoEjuyjscQ8bJ2VWj8_JNMrxKXoo10iLdkwD1KHd8t9o1Wpblf95Ayq0Ie9bFNQqZM2cvIbvdhznmANdDCarValsOHBeF9xq0cwYEOt8y9bHntC_BGv1KUb049kDxXQGicJ0RW2m2CuvjaAiogK3Dp2Bc6WkwUsdqdWYgyXxF3_a79S0ex_ro5ECXuUgeQ0JEDKBuILThkHLS7zaIzRR"/>
+<div class="absolute inset-0 bg-inverse-surface/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+<button class="p-1 rounded-full bg-surface text-on-surface hover:text-primary"><span class="material-symbols-outlined text-[16px]">visibility</span></button>
+<button class="p-1 rounded-full bg-surface text-error hover:bg-error-container"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+</div>
+<span class="absolute bottom-1.5 left-2 px-2 py-0.5 rounded text-[9px] font-semibold bg-inverse-surface/75 text-inverse-on-surface">Nameplate</span>
+</div>
+<div class="relative h-28 rounded-2xl overflow-hidden shadow-sm group">
+<img class="w-full h-full object-cover" data-alt="Protective cardboard packaging crate with custom foam inserts designed for safe logistics transport of heavy hardware refrigeration units in a tidy warehouse setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrP0LlDW1dgKQSoDXYKJI9L8XacdWwOP8A_GjDVKWNeImlEpGnhXkt7UqSj6qfDezShSNs03tZMB5sabI96Fp08wYI68AiGJxoP2esjepHJv18PmJaZQEYBByj4RtUva-_2qZ82mdMVoLu3uPHOXTpaOS7hPPkaSE_OQSgDA_U94CUi8Xaa_Zdzc13XefuPIhTyJ6AQC8oLvIqWlK9ZUQ3l2HKlgUUeh36VXcvyQUHL8r4HwkjH9fR"/>
+<div class="absolute inset-0 bg-inverse-surface/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+<button class="p-1 rounded-full bg-surface text-on-surface hover:text-primary"><span class="material-symbols-outlined text-[16px]">visibility</span></button>
+<button class="p-1 rounded-full bg-surface text-error hover:bg-error-container"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+</div>
+<span class="absolute bottom-1.5 left-2 px-2 py-0.5 rounded text-[9px] font-semibold bg-inverse-surface/75 text-inverse-on-surface">Packaging</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Action Footer -->
+<div class="px-8 py-4 bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0 shadow-inner">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-[#16b364]">check</span>
+<span>Validated against Sahara SKU compliance standards</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<button class="px-4 py-2.5 rounded-lg text-xs font-semibold text-on-surface hover:bg-surface-container transition" id="cancelModalBtn" type="button">
+            Cancel
+          </button>
+<button class="px-4 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-bold text-on-surface transition shadow-sm" type="button">
+            Save as Draft
+          </button>
+<button class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary shadow-md shadow-primary/25 transition flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+<span>Publish Spare Part to Catalog</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Lightweight vanilla micro-interactions for modal toggling
+    const modal = document.getElementById('productModal');
+    const triggerBtn = document.getElementById('triggerModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    if (triggerBtn) triggerBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  </script>
+</div></main></div></body></html>

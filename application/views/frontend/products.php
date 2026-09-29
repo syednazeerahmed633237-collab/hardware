@@ -1,0 +1,1580 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+$js_products = array();
+$prod_source = isset($products) ? $products : (isset($latest_products) ? $latest_products : array());
+foreach ($prod_source as $p) {
+    $specs = json_decode($p->specs, true) ?: array();
+    $brands_arr = array_map('trim', explode(',', $p->brand));
+    $js_products[] = array(
+        'id' => 'prod-' . $p->id,
+        'db_id' => $p->id,
+        'title' => $p->product_name,
+        'category' => isset($p->category_name) ? $p->category_name : 'General',
+        'brand' => $brands_arr,
+        'size' => $p->size ?: 'Standard',
+        'inStock' => ($p->stock_quantity > 0),
+        'stockCount' => (int)$p->stock_quantity,
+        'price' => '₹' . number_format($p->price, 0),
+        'sku' => $p->sku,
+        'image' => base_url('uploads/products/' . ($p->image ?: 'default.png')),
+        'specs' => $specs,
+        'description' => $p->description
+    );
+}
+?>
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Log HARDWARE | Sahara Hardware Spare Parts &amp; Supplies</title>
+<!-- Google Font: Inter & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            mono: ['monospace'],
+          },
+          colors: {
+            brand: {
+              charcoal: '#171717',
+              dark: '#111111',
+              card: '#FFFFFF',
+              surface: '#F8F7F3',
+              border: '#E8E7E1',
+              green: '#16B364',
+              greenBg: '#EAF8F0',
+              red: '#EF4444',
+              redBg: '#FDF2F2',
+              accent: '#EA580C',
+            }
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'elevated': '0 10px 30px -5px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Page Styles -->
+<style data-purpose="base-styling">
+    body {
+      background-color: #F8F7F3;
+      color: #171717;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Hide scrollbars gracefully for clean horizontal scroll if needed */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style data-purpose="map-and-effects">
+    /* Subtle road line styling for the custom interactive vector map */
+    .road-network {
+      stroke: #E2DFD8;
+      stroke-width: 8;
+      stroke-linecap: round;
+      fill: none;
+    }
+    .road-primary {
+      stroke: #D6D2C4;
+      stroke-width: 14;
+      stroke-linecap: round;
+      fill: none;
+    }
+    .road-secondary {
+      stroke: #EDEAE1;
+      stroke-width: 5;
+      stroke-linecap: round;
+      fill: none;
+    }
+  </style>
+<!-- END: Custom Page Styles -->
+<meta content="web_standard" name="shell-type"></head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-neutral-800 selection:text-white">
+<!-- BEGIN: Top Navigation Bar -->
+<header class="sticky top-0 z-40 bg-[#171717] text-white border-b border-neutral-800" data-purpose="top-navigation">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<!-- Brand Logo -->
+<div class="flex items-center space-x-8">
+<a class="flex items-center gap-2.5 group" href="<?= site_url("products") ?>">
+<!-- Geometric Hardware Icon -->
+<div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-neutral-900 font-bold shadow-inner">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+<path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm11 2a2 2 0 104 0 2 2 0 00-4 0z"></path>
+</svg>
+</div>
+<div class="leading-tight">
+<span class="text-lg font-extrabold tracking-tight text-white uppercase">Log</span>
+<span class="text-sm font-semibold tracking-wider text-neutral-300 ml-1">HARDWARE</span>
+</div>
+</a>
+<!-- Desktop Navigation Links -->
+<nav aria-label="Primary Navigation" class="hidden md:flex items-center space-x-1 pl-4">
+<a class="px-3.5 py-1.5 text-sm font-medium text-white border-b-2 border-white" href="<?= site_url("products") ?>">Home</a>
+<a class="px-3.5 py-1.5 text-sm font-medium text-neutral-400 hover:text-white transition-colors" href="#products-section">Products</a>
+<a class="px-3.5 py-1.5 text-sm font-medium text-neutral-400 hover:text-white transition-colors" href="#products-section">Brands</a>
+<a class="px-3.5 py-1.5 text-sm font-medium text-neutral-400 hover:text-white transition-colors" href="#category-section">Categories</a>
+<a class="px-3.5 py-1.5 text-sm font-medium text-neutral-400 hover:text-white transition-colors" href="#store-section">About</a>
+</nav>
+</div>
+<!-- Right Utility Actions -->
+<div class="flex items-center space-x-3">
+<!-- Quick Search Toggle -->
+<button aria-label="Open Quick Search" class="p-2 text-neutral-400 hover:text-white rounded-full hover:bg-neutral-800 transition" id="navSearchTrigger">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button><button aria-label="View Cart" class="relative p-2 text-neutral-400 hover:text-white rounded-full hover:bg-neutral-800 transition flex items-center justify-center" id="cartDrawerTrigger" onclick="document.getElementById('cartSlideOverDrawer')?.classList.remove('hidden')"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg><span class="absolute -top-1 -right-1 bg-primary text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs border-2 border-[#171717]" id="cartCountBadge">2</span></button>
+<!-- Location Indicator / Store Badge Pill -->
+<div class="flex items-center gap-2 bg-[#252525] hover:bg-neutral-800 transition px-3.5 py-1.5 rounded-full border border-neutral-700/60 cursor-pointer text-xs font-medium text-neutral-200" title="Selected Store: Sahara Hardware Bengaluru">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-amber-500/20"></span>
+<span class="">Sahara</span>
+<svg class="w-3.5 h-3.5 text-neutral-400 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</header>
+<!-- END: Top Navigation Bar -->
+<main class="flex-grow"><div class="flex flex-col w-full font-body text-on-surface">
+<!-- Breadcrumbs & Hero Header Section -->
+<section class="w-full bg-surface-container-low px-4 sm:px-6 lg:px-8 py-10 transition-colors">
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumbs" class="flex items-center gap-2 text-xs font-medium text-secondary">
+<a class="hover:text-primary transition-colors" href="<?= site_url("products") ?>">Home</a>
+<span class="text-outline/40">/</span>
+<a class="hover:text-primary transition-colors" href="#products-section">Products</a>
+<span class="text-outline/40">/</span>
+<span class="text-on-surface font-semibold">All Products</span>
+</nav>
+<!-- Main Header Row -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="font-headline text-4xl sm:text-5xl font-semibold tracking-tight text-on-surface">
+              All Products
+            </h1>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed shadow-xs">
+              384 Products Available
+            </span>
+</div>
+<p class="font-body text-sm sm:text-base text-secondary max-w-2xl mt-2 leading-relaxed">
+            Browse our complete catalog of certified OEM spare parts, components, and specialized technician tools for major domestic and commercial appliance brands.
+          </p>
+</div>
+<!-- Fast Assistance Badge -->
+<div class="hidden lg:flex items-center gap-3 bg-surface-container p-3 rounded-2xl shadow-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">verified_user</span>
+</div>
+<div class="text-xs">
+<p class="font-bold text-on-surface">100% Genuine Guaranteed</p>
+<p class="text-secondary">Sahara Bengaluru Warehouse Verified</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Container with Sticky Filters and Product Flow -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col gap-8">
+<!-- Category Quick-Pills / Horizontal Ribbon -->
+<section aria-label="Category Filters" class="w-full">
+<div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2">
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold bg-inverse-surface text-inverse-on-surface shadow-md transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base">apps</span>
+<span class="">All Parts</span>
+<span class="ml-1 text-[11px] px-1.5 py-0.5 rounded-full bg-white/20">384</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">mode_fan</span>
+<span class="">AC Spare Parts</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">92</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">local_laundry_service</span>
+<span class="">Washing Machine</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">84</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">kitchen</span>
+<span class="">Refrigerator Parts</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">76</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">water_drop</span>
+<span class="">Water Purifier</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">48</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">microwave</span>
+<span class="">Microwave &amp; Oven</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">38</span>
+</button>
+<button class="group flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-base text-secondary group-hover:text-primary">construction</span>
+<span class="">General Tools</span>
+<span class="text-[11px] px-1.5 py-0.5 rounded-full bg-surface-container-highest text-secondary">46</span>
+</button>
+</div>
+</section>
+<!-- Comprehensive Filter and Search Controls Bar -->
+<section class="bg-surface-container-low rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col gap-4">
+<!-- Primary Live Search Input -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary text-xl">search</span>
+<input class="w-full bg-surface-container-lowest text-on-surface text-sm pl-11 pr-24 py-3 rounded-2xl border-0 shadow-xs focus:ring-2 focus:ring-primary placeholder:text-secondary/70 transition-all" placeholder="Search by part name, SKU, appliance model (e.g. Inverter compressor, LG front load drain pump)..." type="text">
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-primary hover:bg-primary/90 text-on-primary text-xs font-semibold px-4 py-1.5 rounded-xl transition-all shadow-xs" type="button">
+          Search
+        </button>
+</div>
+<!-- Horizontal Dropdown Selectors -->
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3">
+<!-- Category Filter -->
+<div class="flex flex-col gap-1">
+<label class="text-[11px] font-bold uppercase tracking-wider text-secondary">Category</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface text-xs font-medium py-2.5 px-3 rounded-xl border-0 shadow-xs focus:ring-2 focus:ring-primary appearance-none pr-8">
+<option>All Categories</option>
+<option>AC (Air Conditioner)</option>
+<option>Washing Machine</option>
+<option>Refrigerator</option>
+<option>Water Purifier</option>
+<option>Micro Oven</option>
+<option>General Tools</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- Brand Filter -->
+<div class="flex flex-col gap-1">
+<label class="text-[11px] font-bold uppercase tracking-wider text-secondary">Brand Compatibility</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface text-xs font-medium py-2.5 px-3 rounded-xl border-0 shadow-xs focus:ring-2 focus:ring-primary appearance-none pr-8">
+<option>All Brands</option>
+<option>LG Electronics</option>
+<option>Samsung</option>
+<option>Daikin</option>
+<option>Voltas</option>
+<option>Whirlpool</option>
+<option>Hitachi</option>
+<option>Bosch</option>
+<option>IFB</option>
+<option>Universal Fit</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- Availability Filter -->
+<div class="flex flex-col gap-1">
+<label class="text-[11px] font-bold uppercase tracking-wider text-secondary">Stock Status</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface text-xs font-medium py-2.5 px-3 rounded-xl border-0 shadow-xs focus:ring-2 focus:ring-primary appearance-none pr-8">
+<option>All Availability</option>
+<option selected="">In Stock (Bengaluru)</option>
+<option>Pre-order / Not Available</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- Appliance Type / Size -->
+<div class="flex flex-col gap-1">
+<label class="text-[11px] font-bold uppercase tracking-wider text-secondary">Tonnage / Size</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest text-on-surface text-xs font-medium py-2.5 px-3 rounded-xl border-0 shadow-xs focus:ring-2 focus:ring-primary appearance-none pr-8">
+<option>All Sizes</option>
+<option>1.0 Ton</option>
+<option>1.5 Ton</option>
+<option>2.0 Ton</option>
+<option>6.5 kg - 8.0 kg</option>
+<option>Double Door Frost-Free</option>
+<option>75 / 80 GPD Standard</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-base">expand_more</span>
+</div>
+</div>
+<!-- More Filters Trigger -->
+<div class="flex flex-col justify-end col-span-2 sm:col-span-2 md:col-span-1">
+<button class="w-full bg-surface-container hover:bg-surface-container-high text-on-surface py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs" onclick="document.getElementById('moreFiltersPanel')?.classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-base text-primary">tune</span>
+<span class="">More Filters</span>
+</button>
+</div>
+</div>
+<!-- Active Filter Chips & View Controls Row -->
+<div class="pt-3 border-0 flex flex-wrap items-center justify-between gap-3 text-xs">
+<!-- Chips container -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="text-secondary font-medium mr-1">Active:</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface font-medium shadow-2xs">
+            Category: <strong class="font-bold">All Products</strong>
+<button class="hover:text-primary transition-colors ml-0.5" type="button">×</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface font-medium shadow-2xs">
+            Availability: <strong class="font-bold">In Stock</strong>
+<button class="hover:text-primary transition-colors ml-0.5" type="button">×</button>
+</span>
+<button class="text-xs text-primary font-semibold hover:underline px-2 py-1" type="button">
+            Clear All Filters
+          </button>
+</div>
+<!-- Sort and Counter Block -->
+<div class="flex items-center gap-4 ml-auto">
+<span class="text-secondary font-medium hidden sm:inline">Showing 1–12 of 384 products</span>
+<div class="flex items-center gap-1.5">
+<span class="text-secondary">Sort:</span>
+<select class="bg-surface-container-lowest text-on-surface text-xs font-semibold py-1.5 px-2.5 rounded-lg border-0 shadow-xs focus:ring-1 focus:ring-primary">
+<option>Relevance</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Name A-Z</option>
+<option>Newest Arrivals</option>
+</select>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Catalogue Grid: 4 Columns on Desktop -->
+<section aria-label="Catalog Products" class="w-full">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Product 1 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<img class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" data-alt="Close up photograph of a brand new washable AC indoor unit polypropylene air filter mesh with warm daylight illumination in a modern hardware store setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCZVuySevbPWHNB1KpBzsdMz8Ib0dsxG_gsIIVxVnWwA7rLVnUrwymEXWYqn-Y5bL7kC3yRiMausKRkeLXQQwTnAesTgqNa_X8c6Df4AxA47YOyJvyEBB4vdaDzEtumooG99FKpoqoCthYHIP4mJkCYJwHBtnvSNV552KRDyKTxYyhDsYIhP-HWvUNlOrevPLIv7TDTNB3fueaGke3HIgpmom2zS3SPmtQdjkX9cd-CWyS5rTc2Meu">
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹450
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Air Conditioner</span>
+<span class="text-[11px] font-medium text-secondary">SKU: AC-FILT-01</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              AC Air Filter
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Suitable for 1.5T / 2T split indoor units. High-density washable mesh.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>LG, Samsung, Daikin</strong></span>
+<span class="">Size: <strong>Standard</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2"><button class="w-9 h-9 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition shadow-xs" onclick="document.getElementById('cartSlideOverDrawer')?.classList.remove('hidden')" title="Add to Cart" type="button"><span class="material-symbols-outlined text-base">add_shopping_cart</span></button>
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20I%20am%20enquiring%20about%20AC%20Air%20Filter" rel="noreferrer" target="_blank" title="Enquire on WhatsApp">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" onclick="window.openProductDetail ? window.openProductDetail('prod-1') : null" title="View Technical Specs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 2 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<img class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" data-alt="Studio photograph of a heavy duty black rotary AC inverter compressor with copper connection tubes placed against a warm linen minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgH2nKLmeFYvD_KxYqELhO9atcAknyaSQYxVkbV-Z-tTjMH-oMD-LvUcTIJnyxQKrNojVjKpdL-uXzHnF2SFacdFQQ62AFsa4raESHA86TBG9bOjFQVeJc7ig6KWo9YBu990SukF7Au80GQvlNVXlzr1kpjwxZSEa5sZ8bha5REKwan8qjsOWgR7oQg3YeqpbTpvnuncaE6OM-_arQbocvi7kdJXhXihp2bxR-TUZO5tZFIMZpUip4">
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹6,800
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Air Conditioner</span>
+<span class="text-[11px] font-medium text-secondary">SKU: AC-COMP-02</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Inverter Rotary AC Compressor
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              100% Copper winding, high efficiency OEM part for R32/R410 systems.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>LG Inverter</strong></span>
+<span class="">Size: <strong>1.5 Ton / R32</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2"><button class="w-9 h-9 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition shadow-xs" onclick="document.getElementById('cartSlideOverDrawer')?.classList.remove('hidden')" title="Add to Cart" type="button"><span class="material-symbols-outlined text-base">add_shopping_cart</span></button>
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Inverter%20Rotary%20Compressor" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" onclick="window.openProductDetail ? window.openProductDetail('prod-2') : null" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 3 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<img class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105" data-alt="Editorial photograph of a clean white universal air conditioner handheld remote controller with blue backlit display on a warm natural stone table." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJNX24WR-uEKDszJpuWjKaE0QzKAiax4Evd82M0NAUVF2SpV8hl8Z5Yksf0gQ2ho1ARUI2O7p8h07ao6WH2X0Qx_c0kdfMp1cl7aX5B0lRldEma2h-RE41VhRGK1Z7sPfa4X2zxVmeuPAtiO29Y-AEOMeyhWZW4S-kDH8UnFrZWIqUB4vyK8N1z9wADFm3naSxd_7hP0bQHXIIimYojw6qoTotMuwzD7itoZ_cNIw9pu7a_2oDyC0n">
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹350
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Air Conditioner</span>
+<span class="text-[11px] font-medium text-secondary">SKU: AC-REM-03</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Universal AC Remote Control
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Backlit LCD display, 1000-in-1 auto-search code compatibility with memories.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>All Brands (Universal)</strong></span>
+<span class="">Size: <strong>Universal IR</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2"><button class="w-9 h-9 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface flex items-center justify-center transition shadow-xs" onclick="document.getElementById('cartSlideOverDrawer')?.classList.remove('hidden')" title="Add to Cart" type="button"><span class="material-symbols-outlined text-base">add_shopping_cart</span></button>
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Universal%20AC%20Remote" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" onclick="window.openProductDetail ? window.openProductDetail('prod-3') : null" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 4 (Not Available state) -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between opacity-95">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">memory</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹3,400
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Air Conditioner</span>
+<span class="text-[11px] font-medium text-secondary">SKU: AC-PCB-04</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Split AC Inverter Motherboard / PCB
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Genuine OEM printed circuit board with surge protection heat sink.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>Daikin, Samsung</strong></span>
+<span class="">Size: <strong>1.5 Ton</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FDF2F2] text-[#EF4444]">
+<span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>
+              Not Available
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-secondary flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20please%20notify%20when%20AC%20Inverter%20PCB%20is%20back%20in%20stock" rel="noreferrer" target="_blank" title="Pre-order Enquiry">
+<span class="material-symbols-outlined text-lg">notification_add</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" onclick="window.openProductDetail ? window.openProductDetail('prod-4') : null" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 5 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">water_pump</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹850
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Washing Machine</span>
+<span class="text-[11px] font-medium text-secondary">SKU: WM-PUMP-05</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Front Load Washing Machine Drain Pump
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Heavy duty magnetic impeller motor, 30W 220V standard connector.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>LG, Bosch, IFB</strong></span>
+<span class="">Size: <strong>Universal 30W</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Front%20Load%20Drain%20Pump" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" onclick="window.openProductDetail ? window.openProductDetail('prod-5') : null" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 6 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">rotate_right</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹1,150
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Washing Machine</span>
+<span class="text-[11px] font-medium text-secondary">SKU: WM-PULS-06</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Washing Machine Pulsator Assembly
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Diamond drum compatible pulsator roller with center cap &amp; bolt.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>Samsung</strong></span>
+<span class="">Size: <strong>Top Load 380mm</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Pulsator%20Assembly" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 7 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">compress</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹5,900
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Refrigerator</span>
+<span class="text-[11px] font-medium text-secondary">SKU: RF-COMP-07</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Refrigerator Inverter Compressor
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              R600a eco refrigerant compressor for energy efficient domestic cooling.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>Whirlpool, LG</strong></span>
+<span class="">Size: <strong>240L - 350L</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Refrigerator%20Inverter%20Compressor" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 8 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">thermostat</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹420
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Refrigerator</span>
+<span class="text-[11px] font-medium text-secondary">SKU: RF-THERM-08</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Double Door Refrigerator Thermostat &amp; Sensor
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Precision defrost termination sensor with sealed waterproof casing.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>Samsung, LG</strong></span>
+<span class="">Size: <strong>Standard 3-Pin</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Refrigerator%20Thermostat" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 9 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">filter_alt</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹1,250
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Water Purifier</span>
+<span class="text-[11px] font-medium text-secondary">SKU: WP-MEMB-09</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              RO Water Purifier Membrane 80 GPD
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              High TDS rejection reverse osmosis sheet, 0.0001 micron filtration.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>Kent, Aquaguard</strong></span>
+<span class="">Size: <strong>80 GPD / Standard</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20RO%20Membrane" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 10 (Not Available state) -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between opacity-95">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">bolt</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹1,450
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">Microwave</span>
+<span class="text-[11px] font-medium text-secondary">SKU: MO-MAGN-10</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Microwave Magnetron High Voltage Unit
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Original replacement microwave oscillation tube with thermal cooling fins.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>LG, IFB</strong></span>
+<span class="">Size: <strong>2M214 900W</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FDF2F2] text-[#EF4444]">
+<span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>
+              Not Available
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-secondary flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20please%20notify%20stock%20for%20Microwave%20Magnetron" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">notification_add</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 11 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">handyman</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹2,100
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">General Tools</span>
+<span class="text-[11px] font-medium text-secondary">SKU: TL-FLAR-11</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Heavy Duty HVAC Flare &amp; Swaging Tool Kit
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              Eccentric cone 45° flaring tool set with clutch release for technicians.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>General Tools</strong></span>
+<span class="">Size: <strong>1/4" to 3/4"</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20HVAC%20Flare%20Kit" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product 12 -->
+<article class="group bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="w-full aspect-[4/3] rounded-2xl bg-surface-container-low flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-surface-container transition-colors">
+<div class="w-24 h-24 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary">electrical_services</span>
+</div>
+<span class="absolute top-3 right-3 text-xs font-bold text-on-surface bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-2xs">
+                ₹1,650
+              </span>
+</div>
+<div class="mt-4 flex items-center justify-between gap-2">
+<span class="text-[11px] font-bold uppercase tracking-wider text-primary">General Tools</span>
+<span class="text-[11px] font-medium text-secondary">SKU: TL-MTR-12</span>
+</div>
+<h3 class="font-body text-base font-bold text-on-surface mt-1 group-hover:text-primary transition-colors line-clamp-1">
+              Digital Clamp Multimeter &amp; Tester
+            </h3>
+<p class="text-xs text-secondary mt-1.5 line-clamp-2">
+              True RMS auto-ranging multimeter with NCV sensor and carrying pouch.
+            </p>
+<div class="mt-3 text-xs flex items-center justify-between text-on-surface-variant bg-surface-container-low px-3 py-2 rounded-xl">
+<span class="">Brand: <strong>General Tools</strong></span>
+<span class="">Size: <strong>600V AC/DC</strong></span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-0 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+              In Stock
+            </span>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-xs" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20enquiring%20about%20Clamp%20Meter" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-lg">chat</span>
+</a>
+<button class="w-9 h-9 rounded-full bg-surface-container hover:bg-inverse-surface hover:text-inverse-on-surface text-on-surface flex items-center justify-center transition shadow-xs" type="button">
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Pagination & Results Navigation -->
+<nav aria-label="Pagination" class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+<div class="text-xs text-secondary font-medium">
+        Page <span class="font-bold text-on-surface">1</span> of <span class="font-bold text-on-surface">32</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-container-low text-secondary/50 cursor-not-allowed flex items-center gap-1" disabled="" type="button">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+<span class="">Previous</span>
+</button>
+<button class="w-9 h-9 rounded-xl text-xs font-bold bg-primary text-on-primary shadow-xs" type="button">1</button>
+<button class="w-9 h-9 rounded-xl text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition" type="button">2</button>
+<button class="w-9 h-9 rounded-xl text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition" type="button">3</button>
+<span class="px-2 text-secondary text-xs">...</span>
+<button class="w-9 h-9 rounded-xl text-xs font-medium bg-surface-container hover:bg-surface-container-high text-on-surface transition" type="button">32</button>
+<button class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface transition flex items-center gap-1" type="button">
+<span class="">Next</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</nav>
+<!-- Trust & Service Value Banner -->
+<section class="w-full bg-surface-container-high rounded-3xl p-6 sm:p-8 mt-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-2xl">local_shipping</span>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-on-surface">Fast Dispatch in 24 Hours</h4>
+<p class="text-xs text-secondary mt-1 leading-relaxed">
+              Same-day courier and localized counter handoff for verified technician orders across Bengaluru and South India.
+            </p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-2xl">verified</span>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-on-surface">100% Genuine OEM Parts</h4>
+<p class="text-xs text-secondary mt-1 leading-relaxed">
+              Direct brand-sourced capacitors, compressors, PC boards, and valves backed by standard store replacement warranty.
+            </p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-2xl">storefront</span>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-on-surface">Walk-in Counter Support</h4>
+<p class="text-xs text-secondary mt-1 leading-relaxed">
+              Bring your faulty sample part directly to our Sahara Hardware Bengaluru counter for instant physical model matching.
+            </p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div></main>
+<!-- BEGIN: Global Footer -->
+<footer class="bg-[#151515] text-white pt-16 pb-12 border-t border-neutral-800" data-purpose="global-footer">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Multi-column links -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 pb-12 border-b border-neutral-800/80 text-sm">
+<!-- Col 1: Products -->
+<div>
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Product</div>
+<ul class="space-y-2.5 text-neutral-400">
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">General tools</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Washing machine</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Refrigerator</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Water purifier</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Micro oven</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">AC</a></li>
+</ul>
+</div>
+<!-- Col 2: Brands -->
+<div>
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Brands</div>
+<ul class="space-y-2.5 text-neutral-400">
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">LG</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Samsung</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Daikin</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Voltas</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Whirlpool</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Hitachi</a></li>
+</ul>
+</div>
+<!-- Col 3: Company -->
+<div>
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Company</div>
+<ul class="space-y-2.5 text-neutral-400">
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">About Us</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Contact</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Blog</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Careers</a></li>
+</ul>
+</div>
+<!-- Col 4: Support -->
+<div>
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Support</div>
+<ul class="space-y-2.5 text-neutral-400">
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Help Center</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Return Policy</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Shipping</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">FAQ</a></li>
+</ul>
+</div>
+<!-- Col 5: Legal -->
+<div>
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Legal</div>
+<ul class="space-y-2.5 text-neutral-400">
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Privacy Policy</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Terms of Service</a></li>
+<li class=""><a class="hover:text-white transition" href="<?= site_url("products") ?>">Cookie Policy</a></li>
+</ul>
+</div>
+<!-- Col 6: Social & Community -->
+<div class="col-span-2 md:col-span-1">
+<div class="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-4">Follow Us</div>
+<div class="flex items-center space-x-3">
+<!-- Facebook -->
+<a aria-label="Facebook" class="w-9 h-9 rounded-full bg-neutral-800 hover:bg-blue-600 transition flex items-center justify-center text-white" href="<?= site_url("products") ?>">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"></path></svg>
+</a>
+<!-- Instagram -->
+<a aria-label="Instagram" class="w-9 h-9 rounded-full bg-neutral-800 hover:bg-pink-600 transition flex items-center justify-center text-white" href="<?= site_url("products") ?>">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+<!-- YouTube -->
+<a aria-label="YouTube" class="w-9 h-9 rounded-full bg-neutral-800 hover:bg-red-600 transition flex items-center justify-center text-white" href="<?= site_url("products") ?>">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg>
+</a>
+<!-- LinkedIn -->
+<a aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-neutral-800 hover:bg-blue-700 transition flex items-center justify-center text-white" href="<?= site_url("products") ?>">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<!-- Copyright info -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500">
+<p class="">© 2026 Log HARDWARE. All rights reserved.</p>
+<p class="mt-2 sm:mt-0">Designed for retail customers &amp; professional HVAC / Appliance technicians.</p>
+</div>
+</div>
+</footer>
+<!-- END: Global Footer -->
+<!-- BEGIN: Interactive Product Detail Modal -->
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 overflow-y-auto hidden" id="productDetailModal" role="dialog">
+<!-- Backdrop overlay -->
+<div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" id="closeDetailBackdrop"></div>
+<div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+<div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-neutral-200">
+<!-- Modal Close Button -->
+<button class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-600 transition" id="closeDetailModalBtn">
+          ✕
+        </button>
+<div class="p-6 sm:p-8" id="modalDetailContent">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+<div class="aspect-square bg-neutral-50 rounded-2xl flex items-center justify-center p-6 border border-neutral-200">
+<svg class="w-24 h-24 text-neutral-300" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+<rect x="15" y="15" width="70" height="70" rx="3" stroke-width="3" fill="#FAF9F6"></rect>
+<path d="M15 35h70M15 55h70M15 75h70M35 15v70M55 15v70M75 15v70" stroke-width="1.5" stroke-dasharray="2 2" stroke="#A8A29E"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold uppercase tracking-wider text-neutral-400">AC</span>
+<span class="text-xs text-neutral-300">•</span>
+<span class="text-xs font-mono font-semibold text-neutral-500">AC-FILT-STD-01</span>
+</div>
+<h2 class="text-2xl font-bold text-neutral-900 mt-1">AC Air Filter</h2>
+<div class="text-2xl font-extrabold text-neutral-900 mt-2">₹350</div>
+<div class="mt-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF8F0] text-[#16B364]">
+<span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+                    In Stock at Sahara Hardware (18 units available)
+                  </span>
+</div>
+<!-- Specs Matrix -->
+<div class="mt-6 border-t border-neutral-200 pt-4 space-y-2 text-xs">
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500">Supported Brands:</span>
+<span class="font-semibold text-neutral-800">LG, Samsung, Daikin, Voltas</span>
+</div>
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500">Size / Tonnage:</span>
+<span class="font-semibold text-neutral-800">Standard</span>
+</div>
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500 capitalize">material:</span>
+<span class="font-semibold text-neutral-800">HD Polypropylene Mesh</span>
+</div>
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500 capitalize">washable:</span>
+<span class="font-semibold text-neutral-800">Yes</span>
+</div>
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500 capitalize">dimensions:</span>
+<span class="font-semibold text-neutral-800">305mm x 310mm</span>
+</div>
+<div class="flex justify-between py-1 border-b border-neutral-100">
+<span class="text-neutral-500 capitalize">warranty:</span>
+<span class="font-semibold text-neutral-800">6 Months</span>
+</div>
+</div>
+<!-- Call to Actions -->
+<div class="mt-6 flex flex-col sm:flex-row gap-3">
+<a href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20I%20am%20looking%20to%20purchase%2Fverify%20stock%20for%3A%20AC%20Air%20Filter%20(AC-FILT-STD-01).%20Please%20let%20me%20know%20pickup%20or%20delivery%20details." target="_blank" class="flex-1 inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-sm font-bold shadow-md transition">
+<span class="">Direct WhatsApp Order</span>
+</a>
+<a href="tel:+919876543210" class="inline-flex items-center justify-center gap-2 bg-neutral-900 hover:bg-black text-white py-3 px-4 rounded-xl text-sm font-bold transition">
+<span class="">Call Store</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Interactive Product Detail Modal -->
+<!-- BEGIN: "More Filters" Slide-Over Panel -->
+<div aria-labelledby="slide-over-title" aria-modal="true" class="fixed inset-0 z-50 hidden overflow-hidden" id="moreFiltersPanel" role="dialog">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity" id="closeFilterBackdrop"></div>
+<div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+<div class="pointer-events-auto w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between">
+<div class="p-6 overflow-y-auto">
+<div class="flex items-center justify-between pb-4 border-b border-neutral-200">
+<h3 class="text-lg font-bold text-neutral-900" id="slide-over-title">Detailed Spares Filter</h3>
+<button class="text-neutral-400 hover:text-neutral-700 p-1" id="closeMoreFiltersBtn">
+              ✕
+            </button>
+</div>
+<!-- Extended Filter Options -->
+<div class="mt-6 space-y-6">
+<!-- Part Type -->
+<div>
+<label class="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 block">Part Type</label>
+<div class="grid grid-cols-2 gap-2 text-sm">
+<label class="flex items-center gap-2 p-2 rounded-lg border border-neutral-200 hover:bg-neutral-50 cursor-pointer">
+<input checked="" class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">Compressors</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg border border-neutral-200 hover:bg-neutral-50 cursor-pointer">
+<input checked="" class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">Air Filters</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg border border-neutral-200 hover:bg-neutral-50 cursor-pointer">
+<input checked="" class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">Remote Controls</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg border border-neutral-200 hover:bg-neutral-50 cursor-pointer">
+<input checked="" class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">PCBs &amp; Circuit</span>
+</label>
+</div>
+</div>
+<!-- Compatibility Matrix -->
+<div>
+<label class="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 block">Power &amp; Voltage</label>
+<div class="space-y-2 text-sm">
+<label class="flex items-center gap-2">
+<input checked="" class="text-neutral-900 focus:ring-0" name="voltage" type="radio" value="all">
+<span class="">All Voltages (220V - 240V AC)</span>
+</label>
+<label class="flex items-center gap-2">
+<input class="text-neutral-900 focus:ring-0" name="voltage" type="radio" value="inverter">
+<span class="">Inverter Only (DC Motors)</span>
+</label>
+</div>
+</div>
+<!-- Warranty -->
+<div>
+<label class="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 block">OEM Warranty</label>
+<div class="space-y-2 text-sm">
+<label class="flex items-center gap-2">
+<input class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">1 Year Manufacturer Warranty</span>
+</label>
+<label class="flex items-center gap-2">
+<input class="rounded text-neutral-900 focus:ring-0" type="checkbox">
+<span class="">Ready Stock in Bengaluru Hub</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions in Drawer -->
+<div class="p-6 bg-neutral-50 border-t border-neutral-200 flex gap-3">
+<button class="flex-1 py-2.5 px-4 text-xs font-semibold text-neutral-600 bg-white border border-neutral-200 rounded-xl hover:bg-neutral-100" id="resetExtendedFilters">
+            Reset
+          </button>
+<button class="flex-1 py-2.5 px-4 text-xs font-semibold text-white bg-neutral-900 rounded-xl hover:bg-black" id="applyExtendedFilters">
+            Apply Filters
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: "More Filters" Slide-Over Panel -->
+<!-- BEGIN: Application Client-Side State & Interaction Logic -->
+<script data-purpose="app-logic">
+    // Mock Product Database matching the exact visual references & spare catalog
+    const productsDB = <?php echo json_encode($js_products); ?>;
+    const CI_BASE_URL = "<?= base_url() ?>";
+    const CI_SITE_URL = "<?= site_url() ?>";
+
+    // Reactive Application State
+    const state = {
+      category: "AC",
+      brand: "All",
+      availability: "In Stock",
+      size: "All",
+      searchQuery: "",
+      sortBy: "relevance"
+    };
+
+    // DOM Elements
+    const productGrid = document.getElementById("productGrid");
+    const emptyCatalogState = document.getElementById("emptyCatalogState");
+    const productCounter = document.getElementById("productCounter");
+    const catalogTitle = document.getElementById("catalogTitle");
+    const filterCategory = document.getElementById("filterCategory");
+    const filterBrand = document.getElementById("filterBrand");
+    const filterAvailability = document.getElementById("filterAvailability");
+    const filterSize = document.getElementById("filterSize");
+    const sortBySelect = document.getElementById("sortBySelect");
+    const heroSearchForm = document.getElementById("heroSearchForm");
+    const mainSearchInput = document.getElementById("mainSearchInput");
+    const searchSuggestions = document.getElementById("searchSuggestions");
+    const activeFilterChips = document.getElementById("activeFilterChips");
+    const chipCategoryLabel = document.getElementById("chipCategoryLabel");
+    const chipAvailLabel = document.getElementById("chipAvailLabel");
+    const clearAllFiltersBtn = document.getElementById("clearAllFiltersBtn");
+    const resetFromEmptyBtn = document.getElementById("resetFromEmptyBtn");
+
+    // Modal elements
+    const productDetailModal = document.getElementById("productDetailModal");
+    const modalDetailContent = document.getElementById("modalDetailContent");
+    const closeDetailModalBtn = document.getElementById("closeDetailModalBtn");
+    const closeDetailBackdrop = document.getElementById("closeDetailBackdrop");
+
+    // Slide-over elements
+    const moreFiltersPanel = document.getElementById("moreFiltersPanel");
+    const openMoreFiltersBtn = document.getElementById("openMoreFiltersBtn");
+    const closeMoreFiltersBtn = document.getElementById("closeMoreFiltersBtn");
+    const closeFilterBackdrop = document.getElementById("closeFilterBackdrop");
+    const applyExtendedFilters = document.getElementById("applyExtendedFilters");
+    const resetExtendedFilters = document.getElementById("resetExtendedFilters");
+
+    // Render Product Cards to DOM
+    function renderProducts() {
+      // 1. Filter items based on active criteria
+      let filtered = productsDB.filter(item => {
+        // Category filter
+        if (state.category !== "All" && item.category !== state.category) {
+          return false;
+        }
+
+        // Availability filter
+        if (state.availability === "In Stock" && !item.inStock) {
+          return false;
+        }
+        if (state.availability === "Not Available" && item.inStock) {
+          return false;
+        }
+
+        // Brand filter
+        if (state.brand !== "All") {
+          const hasBrand = item.brand.some(b => b.toLowerCase().includes(state.brand.toLowerCase()) || b === "All Brands");
+          if (!hasBrand) return false;
+        }
+
+        // Size filter
+        if (state.size !== "All" && item.size !== state.size) {
+          return false;
+        }
+
+        // Search text filter
+        if (state.searchQuery.trim() !== "") {
+          const q = state.searchQuery.toLowerCase();
+          const matchTitle = item.title.toLowerCase().includes(q);
+          const matchCategory = item.category.toLowerCase().includes(q);
+          const matchBrand = item.brand.some(b => b.toLowerCase().includes(q));
+          if (!matchTitle && !matchCategory && !matchBrand) return false;
+        }
+
+        return true;
+      });
+
+      // 2. Sort items
+      if (state.sortBy === "name-asc") {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (state.sortBy === "brand") {
+        filtered.sort((a, b) => a.brand[0].localeCompare(b.brand[0]));
+      }
+
+      // Update counters & Title
+      productCounter.textContent = `${filtered.length} products`;
+      catalogTitle.textContent = state.category === "All" ? "All Spare Parts" : `${state.category} Spare Parts`;
+
+      // Update active chips UI
+      chipCategoryLabel.textContent = state.category;
+      chipAvailLabel.textContent = state.availability;
+
+      // Handle Empty State
+      if (filtered.length === 0) {
+        productGrid.innerHTML = "";
+        emptyCatalogState.classList.remove("hidden");
+        return;
+      } else {
+        emptyCatalogState.classList.add("hidden");
+      }
+
+      // Render items
+      productGrid.innerHTML = filtered.map(item => {
+        
+        const imgTag = (item.image && item.image.indexOf('default.png') === -1)
+          ? `<img src="${item.image}" alt="${item.title}" class="w-24 h-24 object-contain max-h-full drop-shadow-sm">`
+          : (item.imageSvg || `<img src="${item.image || (CI_BASE_URL + 'uploads/products/default.png')}" alt="${item.title}" class="w-24 h-24 object-contain max-h-full">`);
+    
+        const brandListStr = item.brand.slice(0, 4).join(", ");
+        const waText = encodeURIComponent(`Hi Sahara Hardware, I am interested in checking availability for ${item.title} (${item.size}) [SKU: ${item.sku}].`);
+        const waLink = `https://wa.me/919876543210?text=${waText}`;
+
+        return `
+          <div class="product-card group bg-white rounded-2xl p-4 border border-neutral-200/90 shadow-sm hover:shadow-xl hover:border-neutral-400 transition-all duration-300 flex flex-col justify-between" data-id="${item.id}">
+            
+            <div>
+              <!-- Visual Product Container with light background -->
+              <div class="w-full aspect-[4/3] rounded-xl bg-neutral-50 flex items-center justify-center p-4 relative overflow-hidden group-hover:bg-neutral-100/70 transition-colors">
+                ${imgTag}
+                <span class="absolute top-2.5 right-2.5 text-[11px] font-bold text-neutral-600 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded shadow-xs border border-neutral-200">
+                  ${item.price}
+                </span>
+              </div>
+
+              <!-- Product Info -->
+              <div class="mt-4">
+                <h3 class="text-base font-bold text-neutral-900 group-hover:text-black leading-snug">
+                  ${item.title}
+                </h3>
+                
+                <p class="text-xs text-neutral-500 mt-1 line-clamp-1">
+                  Suitable for ${brandListStr}
+                </p>
+
+                <div class="mt-2 text-xs text-neutral-700">
+                  <span class="font-medium text-neutral-400">Size:</span> 
+                  <span class="font-semibold text-neutral-800">${item.size}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer: Stock Badge & Actions matching reference -->
+            <div class="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
+              
+              <!-- Stock Indicator Badge -->
+              <div>
+                ${item.inStock 
+                  ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#EAF8F0] text-[#16B364]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#16B364]"></span>
+                      In Stock
+                    </span>`
+                  : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FDF2F2] text-[#EF4444]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                      Not Available
+                    </span>`
+                }
+              </div>
+
+              <!-- Action Buttons: WhatsApp & Details Drawer Trigger -->
+              <div class="flex items-center gap-2">
+                
+                <!-- Quick WhatsApp Action CTA -->
+                <a 
+                  href="${waLink}" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  title="Enquire on WhatsApp"
+                  class="w-9 h-9 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition shadow-sm active:scale-95"
+                  aria-label="Enquire on WhatsApp about ${item.title}">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.942.553 3.754 1.512 5.292L2 22l4.821-1.472a10.007 10.007 0 005.21 1.503c5.536 0 10.031-4.495 10.031-10.031C22.062 6.495 17.567 2 12.031 2zm0 18.337a8.27 8.27 0 01-4.223-1.153l-.303-.18-3.137.959.967-3.056-.197-.314A8.28 8.28 0 013.766 12.03c0-4.566 3.7-8.266 8.265-8.266 4.566 0 8.266 3.7 8.266 8.266 0 4.565-3.7 8.266-8.266 8.266z"/></svg>
+                </a>
+
+                <!-- Details Arrow Button -->
+                <button 
+                  type="button"
+                  data-view-id="${item.id}"
+                  title="View Specs & OEM Details"
+                  class="view-product-btn w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-900 hover:text-white text-neutral-700 flex items-center justify-center transition active:scale-95 border border-neutral-200">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join("");
+
+      // Bind Details Trigger Buttons
+      document.querySelectorAll(".view-product-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-view-id");
+          openProductDetail(id);
+        });
+      });
+    }
+
+    // Open & Render Product Detail Modal
+    function openProductDetail(productId) {
+      const item = productsDB.find(p => p.id === productId);
+      if (!item) return;
+
+      const waText = encodeURIComponent(`Hi Sahara Hardware, I am looking to purchase/verify stock for: ${item.title} (${item.sku}). Please let me know pickup or delivery details.`);
+      const waLink = `https://wa.me/919876543210?text=${waText}`;
+
+      modalDetailContent.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div class="aspect-square bg-neutral-50 rounded-2xl flex items-center justify-center p-6 border border-neutral-200">
+            ${imgTag}
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-neutral-400">${item.category}</span>
+              <span class="text-xs text-neutral-300">•</span>
+              <span class="text-xs font-mono font-semibold text-neutral-500">${item.sku}</span>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-neutral-900 mt-1">${item.title}</h2>
+            <div class="text-2xl font-extrabold text-neutral-900 mt-2">${item.price}</div>
+
+            <div class="mt-3">
+              ${item.inStock 
+                ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF8F0] text-[#16B364]">
+                    <span class="w-2 h-2 rounded-full bg-[#16B364]"></span>
+                    In Stock at Sahara Hardware (${item.stockCount} units available)
+                  </span>`
+                : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FDF2F2] text-[#EF4444]">
+                    <span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>
+                    Currently Sold Out (Back-order upon enquiry)
+                  </span>`
+              }
+            </div>
+
+            <!-- Specs Matrix -->
+            <div class="mt-6 border-t border-neutral-200 pt-4 space-y-2 text-xs">
+              <div class="flex justify-between py-1 border-b border-neutral-100">
+                <span class="text-neutral-500">Supported Brands:</span>
+                <span class="font-semibold text-neutral-800">${item.brand.join(", ")}</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-neutral-100">
+                <span class="text-neutral-500">Size / Tonnage:</span>
+                <span class="font-semibold text-neutral-800">${item.size}</span>
+              </div>
+              ${Object.entries(item.specs).map(([k, v]) => `
+                <div class="flex justify-between py-1 border-b border-neutral-100">
+                  <span class="text-neutral-500 capitalize">${k}:</span>
+                  <span class="font-semibold text-neutral-800">${v}</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Call to Actions -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+              <a 
+                href="${waLink}" 
+                target="_blank"
+                class="flex-1 inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-sm font-bold shadow-md transition">
+                <span>Direct WhatsApp Order</span>
+              </a>
+              <a 
+                href="tel:+919876543210"
+                class="inline-flex items-center justify-center gap-2 bg-neutral-900 hover:bg-black text-white py-3 px-4 rounded-xl text-sm font-bold transition">
+                <span>Call Store</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      `;
+
+      productDetailModal.classList.remove("hidden");
+    }
+
+    function closeProductDetail() {
+      productDetailModal.classList.add("hidden");
+    }
+
+    // Category Card Click Interactivity
+    document.querySelectorAll(".category-card").forEach(card => {
+      card.addEventListener("click", () => {
+        const cat = card.getAttribute("data-category-name");
+        
+        // Update active UI card style
+        document.querySelectorAll(".category-card").forEach(c => {
+          c.classList.remove("border-2", "border-neutral-900", "ring-2", "ring-neutral-900/10");
+          c.classList.add("border-neutral-200/80");
+        });
+        card.classList.add("border-2", "border-neutral-900", "ring-2", "ring-neutral-900/10");
+
+        // Sync dropdown & state
+        state.category = cat;
+        filterCategory.value = cat;
+        renderProducts();
+
+        // Smooth scroll to catalog
+        document.getElementById("products-section").scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Dropdown Event Listeners
+    filterCategory.addEventListener("change", (e) => {
+      state.category = e.target.value;
+      renderProducts();
+    });
+
+    filterBrand.addEventListener("change", (e) => {
+      state.brand = e.target.value;
+      renderProducts();
+    });
+
+    filterAvailability.addEventListener("change", (e) => {
+      state.availability = e.target.value;
+      renderProducts();
+    });
+
+    filterSize.addEventListener("change", (e) => {
+      state.size = e.target.value;
+      renderProducts();
+    });
+
+    sortBySelect.addEventListener("change", (e) => {
+      state.sortBy = e.target.value;
+      renderProducts();
+    });
+
+    // Quick Search Input & Auto-suggestions Logic
+    mainSearchInput.addEventListener("focus", () => {
+      searchSuggestions.classList.remove("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!heroSearchForm.contains(e.target) && !searchSuggestions.contains(e.target)) {
+        searchSuggestions.classList.add("hidden");
+      }
+    });
+
+    document.querySelectorAll(".suggestion-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const query = item.getAttribute("data-search");
+        mainSearchInput.value = query;
+        state.searchQuery = query;
+        searchSuggestions.classList.add("hidden");
+        renderProducts();
+        document.getElementById("products-section").scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    heroSearchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      state.searchQuery = mainSearchInput.value.trim();
+      searchSuggestions.classList.add("hidden");
+      renderProducts();
+      document.getElementById("products-section").scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Reset Filters Buttons
+    function resetAllFilters() {
+      state.category = "All";
+      state.brand = "All";
+      state.availability = "All";
+      state.size = "All";
+      state.searchQuery = "";
+      state.sortBy = "relevance";
+
+      filterCategory.value = "All";
+      filterBrand.value = "All";
+      filterAvailability.value = "All";
+      filterSize.value = "All";
+      mainSearchInput.value = "";
+      sortBySelect.value = "relevance";
+
+      renderProducts();
+    }
+
+    clearAllFiltersBtn.addEventListener("click", resetAllFilters);
+    resetFromEmptyBtn.addEventListener("click", resetAllFilters);
+
+    // Modal Close Triggers
+    closeDetailModalBtn.addEventListener("click", closeProductDetail);
+    closeDetailBackdrop.addEventListener("click", closeProductDetail);
+
+    // "More Filters" Slide-Over Triggers
+    openMoreFiltersBtn.addEventListener("click", () => {
+      moreFiltersPanel.classList.remove("hidden");
+    });
+    closeMoreFiltersBtn.addEventListener("click", () => {
+      moreFiltersPanel.classList.add("hidden");
+    });
+    closeFilterBackdrop.addEventListener("click", () => {
+      moreFiltersPanel.classList.add("hidden");
+    });
+    applyExtendedFilters.addEventListener("click", () => {
+      moreFiltersPanel.classList.add("hidden");
+      renderProducts();
+    });
+    resetExtendedFilters.addEventListener("click", () => {
+      moreFiltersPanel.classList.add("hidden");
+      resetAllFilters();
+    });
+
+    // Nav Search trigger scroll
+    document.getElementById("navSearchTrigger").addEventListener("click", () => {
+      mainSearchInput.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // View All Categories trigger
+    document.getElementById("viewAllCategoriesBtn").addEventListener("click", () => {
+      state.category = "All";
+      filterCategory.value = "All";
+      renderProducts();
+      document.getElementById("products-section").scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Initial Render
+    renderProducts();
+  </script>
+<!-- END: Application Client-Side State & Interaction Logic -->
+<div aria-labelledby="cart-drawer-title" aria-modal="true" class="fixed inset-0 z-50 hidden overflow-hidden" id="cartSlideOverDrawer" role="dialog"><div class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onclick="document.getElementById('cartSlideOverDrawer')?.classList.add('hidden')"></div><div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"><div class="pointer-events-auto w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between"><div class="p-6 flex flex-col h-full overflow-hidden"><div class="flex items-center justify-between pb-4 border-b border-neutral-200"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-2xl">shopping_cart</span><h3 class="text-lg font-bold text-neutral-900" id="cart-drawer-title">Parts Cart &amp; Order List</h3><span class="text-xs font-semibold bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full ml-1">2 items</span></div><button class="text-neutral-400 hover:text-neutral-700 p-1 rounded-lg hover:bg-neutral-100 transition" onclick="document.getElementById('cartSlideOverDrawer')?.classList.add('hidden')">✕</button></div><div class="py-2 px-3 bg-surface-container-low rounded-xl mt-4 flex items-center gap-2 text-xs text-secondary"><span class="material-symbols-outlined text-base text-primary">verified_user</span><span class="">Sahara Bengaluru verified OEM spares ready for dispatch.</span></div><div class="flex-1 overflow-y-auto divide-y divide-neutral-100 mt-4 space-y-4 pr-1"><div class="flex gap-4 pt-4"><div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 border border-neutral-200"><span class="material-symbols-outlined text-2xl text-secondary">mode_fan</span></div><div class="flex-1"><div class="flex items-start justify-between"><h4 class="text-sm font-bold text-neutral-900">AC Air Filter</h4><span class="text-sm font-bold text-neutral-900">₹450</span></div><p class="text-xs text-neutral-500 mt-0.5">SKU: AC-FILT-01 • LG / Daikin</p><div class="flex items-center justify-between mt-3"><div class="flex items-center border border-neutral-200 rounded-lg overflow-hidden bg-neutral-50"><button class="px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200 transition" type="button">-</button><span class="px-3 text-xs font-semibold text-neutral-800">1</span><button class="px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200 transition" type="button">+</button></div><button class="text-xs text-error hover:underline flex items-center gap-1 font-medium" type="button"><span class="material-symbols-outlined text-sm">delete</span>Remove</button></div></div></div><div class="flex gap-4 pt-4"><div class="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 border border-neutral-200"><span class="material-symbols-outlined text-2xl text-secondary">compress</span></div><div class="flex-1"><div class="flex items-start justify-between"><h4 class="text-sm font-bold text-neutral-900">Inverter Rotary AC Compressor</h4><span class="text-sm font-bold text-neutral-900">₹6,800</span></div><p class="text-xs text-neutral-500 mt-0.5">SKU: AC-COMP-02 • 1.5 Ton / R32</p><div class="flex items-center justify-between mt-3"><div class="flex items-center border border-neutral-200 rounded-lg overflow-hidden bg-neutral-50"><button class="px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200 transition" type="button">-</button><span class="px-3 text-xs font-semibold text-neutral-800">1</span><button class="px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200 transition" type="button">+</button></div><button class="text-xs text-error hover:underline flex items-center gap-1 font-medium" type="button"><span class="material-symbols-outlined text-sm">delete</span>Remove</button></div></div></div></div><div class="pt-4 border-t border-neutral-200 space-y-3"><div class="space-y-1.5 text-xs"><div class="flex justify-between text-neutral-500"><span class="">Estimated Subtotal</span><span class="font-semibold text-neutral-800">₹7,250</span></div><div class="flex justify-between text-neutral-500"><span class="">Bengaluru Local Delivery</span><span class="font-semibold text-[#16B364]">FREE</span></div><div class="flex justify-between text-sm font-bold text-neutral-900 pt-2 border-t border-neutral-100"><span class="">Total Amount</span><span class="">₹7,250</span></div></div><div class="flex flex-col gap-2 pt-2"><a class="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white py-3 px-4 rounded-xl text-sm font-bold shadow-md transition" href="https://wa.me/919876543210?text=Hi%20Sahara%20Hardware%2C%20I%20would%20like%20to%20place%20an%20order%20for%20my%20parts%20cart%3A%201x%20AC%20Air%20Filter%20(AC-FILT-01)%20and%201x%20Inverter%20Rotary%20Compressor%20(AC-COMP-02).%20Total%3A%20%E2%82%B97%2C250." rel="noreferrer" target="_blank"><span class="material-symbols-outlined text-lg">chat</span><span class="">Inquire &amp; Order on WhatsApp</span></a><button class="w-full py-3 px-4 rounded-xl text-sm font-bold bg-neutral-900 hover:bg-black text-white transition flex items-center justify-center gap-2 shadow-xs" type="button"><span class="">Proceed to Fast Checkout</span><span class="material-symbols-outlined text-base">arrow_forward</span></button></div></div></div></div></div></div></body></html>
