@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" rx="24" fill="#faf5ee"/>
+  <rect x="20" y="20" width="160" height="160" rx="16" fill="#f2ece4" stroke="#d8d0c8" stroke-width="2"/>
+  <g transform="translate(100, 95)" text-anchor="middle">
+    <!-- Gear icon -->
+    <path d="M-28,-8 L-22,-8 C-21,-12 -19,-16 -16,-19 L-20,-25 L-11,-34 L-5,-30 C-2,-31 2,-31 5,-30 L11,-34 L20,-25 L16,-19 C19,-16 21,-12 22,-8 L28,-8 L28,8 L22,8 C21,12 19,16 16,19 L20,25 L11,34 L5,30 C2,31 -2,31 -5,30 L-11,34 L-20,25 L-16,19 C-19,16 -21,12 -22,8 L-28,8 Z" fill="#c2652a" opacity="0.85"/>
+    <circle cx="0" cy="0" r="10" fill="#faf5ee"/>
+    <!-- Wrench icon -->
+    <path d="M-8,14 L8,-2 L14,4 L-2,20 Z" fill="#3a302a" opacity="0.8"/>
+  </g>
+  <text x="100" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#3a302a" text-anchor="middle" letter-spacing="1">GENUINE OEM</text>
+  <text x="100" y="160" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="500" fill="#8c3c3c" text-anchor="middle">SPARE PART</text>
+</svg>

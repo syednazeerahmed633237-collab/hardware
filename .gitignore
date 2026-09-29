@@ -1,32 +1,39 @@
-.DS_Store
-
-application/cache/*
-!application/cache/index.html
-
-application/logs/*
-!application/logs/index.html
-
-!application/*/.htaccess
-
-composer.lock
-tests/mocks/database/ci_test.sqlite
-
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
+# CodeIgniter gitignore
 /vendor/
+/system/
 
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
+# Environment and sensitive configuration files
+.env
+.env.*
+!.env.example
 
-## Sublime Text cache files
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
+# Application cache and logs
+/application/cache/*
+!/application/cache/index.html
+!/application/cache/.gitkeep
+/application/logs/*
+!/application/logs/index.html
+!/application/logs/.gitkeep
+
+# SQLite local test databases
+*.sqlite
+*.sqlite3
+*.db
+
+# Temporary test scripts
+test_*.php
+
+# User uploads (keep default assets)
+/uploads/products/*
+!/uploads/products/default.*
+!/uploads/products/*.svg
+!/uploads/products/.htaccess
+!/uploads/products/index.html
+
+# Operating System & Editor Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
 *.sublime-project
-/tests/tests/
-/tests/results/
+*.sublime-workspace
